@@ -97,7 +97,14 @@ namespace IW_GUI
                 //This is the path to the csv. Use this to do stuff I guess?
                 string filename = dlg.FileName;
                 //Then run import function and put everything into a the masterlist
-                Inventory.ImportInventory(filename);
+                try
+                {
+                    Inventory.ImportInventory(filename);
+                }
+                catch
+                {
+                    MessageBox.Show("Ummmm that's an invalid CSV ya got there buckaroo. Remember that we only take the weird format that HITS exports too.", "Error", MessageBoxButton.OK);
+                }
             }
         }
     }
