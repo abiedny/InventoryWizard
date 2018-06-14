@@ -19,6 +19,7 @@ namespace IW_GUI
     /// </summary>
     public partial class CreateItemBox : Window
     {
+        //overload for creating item
         public CreateItemBox(string scannedTag)
         {
             InitializeComponent();
@@ -33,6 +34,27 @@ namespace IW_GUI
             roomAnswer.Clear();
 
             serviceTagAnswer.Text = scannedTag;
+        }
+        //overload for modifying item
+        public CreateItemBox(string type, string serviceTag, string make, string model, string staff, string room)
+        {
+            InitializeComponent();
+
+            this.FontFamily = new FontFamily("Comic Sans MS");
+
+            typeAnswer.Clear();
+            serviceTagAnswer.Clear();
+            makeAnswer.Clear();
+            modelAnswer.Clear();
+            staffAnswer.Clear();
+            roomAnswer.Clear();
+
+            typeAnswer.Text = type;
+            serviceTagAnswer.Text = serviceTag;
+            makeAnswer.Text = make;
+            modelAnswer.Text = model;
+            staffAnswer.Text = staff;
+            roomAnswer.Text = room;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

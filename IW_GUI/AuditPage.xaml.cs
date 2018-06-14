@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace IW_GUI
 {
@@ -29,7 +31,7 @@ namespace IW_GUI
         public AuditPage(string hallCode)
         {
             InitializeComponent();
-
+            _hallCode = hallCode;
             Title.Text = "Audit for hall " + hallCode;
 
             scannedItems = new List<InventoryItem>();
@@ -75,9 +77,17 @@ namespace IW_GUI
                 {
                     //Run the add/correct item function or something
                     //and then pop it on the "to add/modify" list
-                    CreateItemBox dlg = new CreateItemBox(ServiceTagInputBox.Text.ToUpper());
+                    CreateItemBox dlg = new CreateItemBox(item.type, item.serviceTag, item.make, item.model, item.staff, item.room);
                     if (dlg.ShowDialog() == true)
                     {
+                        try
+                        {
+                            expectedItems.Remove(item);
+                        }
+                        catch
+                        {
+                            //lol @best practice
+                        }
                         item = dlg.NewItem;
                         modifiedItems.Add(item);
                     }
@@ -99,20 +109,94 @@ namespace IW_GUI
             ExpectedList.Items.Refresh();
             ServiceTagInputBox.Clear();
         }
+
         private void EndAudit_ButtonClick(object sender, RoutedEventArgs e)
         {
-            //Do the ending audit cleanup
-            //Navigate back to home
+            List<string> _scannedInventory = new List<string>();
+            List<string> _remainingInventory = new List<string>();
+
+            foreach (InventoryItem item in scannedItems)
+            {
+                _scannedInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+            }
+            foreach (InventoryItem item in expectedItems)
+            {
+                _remainingInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+            }
+
+            CommonOpenFileDialog dlg = new CommonOpenFileDialog();
+            dlg.Title = "Select Export Location";
+            dlg.IsFolderPicker = true;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_scannedInventory.txt", _scannedInventory);
+                File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_remainingInventory.txt", _remainingInventory);
+            }
+
+            NavigationService.GoBack();
         }
 
         private void ExportScanned_ButtonClick(object sender, RoutedEventArgs e)
         {
-            //Make sure to export all the data on scanned items, not just service tag
+            List<string> _scannedInventory = new List<string>();
+            foreach (InventoryItem item in scannedItems)
+            {
+                _scannedInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+            }
+
+            CommonOpenFileDialog dlg = new CommonOpenFileDialog();
+            dlg.Title = "Select Export Location";
+            dlg.IsFolderPicker = true;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_scannedInventory.txt", _scannedInventory);
+            }
+            return;
         }
 
         private void ExportRemain_ButtonClick(object sender, RoutedEventArgs e)
         {
-            //yep export all the deets same deal here
+            List<string> _remainingInventory = new List<string>();
+            foreach (InventoryItem item in expectedItems)
+            {
+                _remainingInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+            }
+
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "Select Export Location";
+            dlg.IsFolderPicker = true;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_remainingInventory.txt", _remainingInventory);
+            }
+            return;
         }
     }
 }

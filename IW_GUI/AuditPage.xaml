@@ -22,32 +22,31 @@
 
         <TextBlock Name="Title" Grid.Column="1" Grid.Row="0" Text="Audit Page Home" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="48"/>
 
-        <TextBlock Grid.Column="1" Grid.Row="1" Text="Yeah this is the audit page blah blah blah" HorizontalAlignment="Center" Margin="0,25,0,0"/>
-
-        <Label Content="Scan or type in the service tag" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Name="ServiceTagInputBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Margin="0,50,0,0">
-            
+        <Label Content="Scan or type in the service tag:" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="113,10,115,0"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Name="ServiceTagInputBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Margin="100,36,100,0">
         </TextBox>
-        <Button IsDefault="True" Grid.Row="2" Grid.Column="1" Content="Ok" Click="SubmitTag_ButtonClick" HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Margin="0,75,0,0"/>
-        <Button Grid.Row="2" Grid.Column="1" Content="End Audit" Click="EndAudit_ButtonClick" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,70,20"/>
+        <Button IsDefault="True" Grid.Row="1" Grid.Column="1" Content="Ok" Click="SubmitTag_ButtonClick" HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Margin="315,34,35,0" Height="25"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="End Audit" Click="EndAudit_ButtonClick" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,35,20"/>
+
+        <TextBlock Margin="10,65,10,50" TextAlignment="Left" Grid.Column="1" Grid.Row="1" Text="This row is the future home of the autofill/search function." Grid.RowSpan="2"/>
 
         <Label Content="Scanned Items" Grid.RowSpan="3" HorizontalAlignment="Center" Margin="56,10,56,0"/>
-        <ListView Name="ScannedList" Margin="10,35,0,50" Grid.RowSpan="3">
+        <ListView Width="Auto" Name="ScannedList" Margin="10,35,0,50" Grid.RowSpan="3">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Service Tag" DisplayMemberBinding="{Binding serviceTag}" Width="120"/>
-                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding room}"/>
+                    <GridViewColumn Header="Service Tag" DisplayMemberBinding="{Binding serviceTag}" Width="Auto"/>
+                    <GridViewColumn Header="Location" Width="Auto" DisplayMemberBinding="{Binding room}"/>
                 </GridView>
             </ListView.View>
         </ListView>
         <Button Grid.Row="2" Grid.Column="0" Content="Export Scanned Items" Click="ExportScanned_ButtonClick" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,20"/>
 
         <Label Grid.Column="2" Content="Remaining Items for Building" Grid.RowSpan="3" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,10,10,0" Width="Auto"/>
-        <ListView Grid.Column="2" Name="ExpectedList" Margin="0,35,10,50" Grid.RowSpan="3">
+        <ListView Width="Auto" Grid.Column="2" Name="ExpectedList" Margin="0,35,10,50" Grid.RowSpan="3">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Service Tag" DisplayMemberBinding="{Binding serviceTag}" Width="120"/>
-                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding room}"/>
+                    <GridViewColumn Header="Service Tag" DisplayMemberBinding="{Binding serviceTag}" Width="Auto"/>
+                    <GridViewColumn Width="Auto" Header="Location" DisplayMemberBinding="{Binding room}"/>
                 </GridView>
             </ListView.View>
         </ListView>
