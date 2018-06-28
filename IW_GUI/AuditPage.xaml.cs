@@ -114,6 +114,7 @@ namespace IW_GUI
         {
             List<string> _scannedInventory = new List<string>();
             List<string> _remainingInventory = new List<string>();
+            List<string> _modifiedInventory = new List<string>();
 
             foreach (InventoryItem item in scannedItems)
             {
@@ -123,11 +124,14 @@ namespace IW_GUI
             {
                 _remainingInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
             }
+            foreach (InventoryItem item in modifiedItems)
+            {
+                _modifiedInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+            }
 
             CommonOpenFileDialog dlg = new CommonOpenFileDialog();
             dlg.Title = "Select Export Location";
             dlg.IsFolderPicker = true;
-
             dlg.AddToMostRecentlyUsedList = false;
             dlg.AllowNonFileSystemItems = false;
             dlg.EnsureFileExists = true;
@@ -136,10 +140,12 @@ namespace IW_GUI
             dlg.EnsureValidNames = true;
             dlg.Multiselect = false;
             dlg.ShowPlacesList = true;
+
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_scannedInventory.txt", _scannedInventory);
                 File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_remainingInventory.txt", _remainingInventory);
+                File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_modifiedInventory.txt", _modifiedInventory);
             }
 
             NavigationService.GoBack();
