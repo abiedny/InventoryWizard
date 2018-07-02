@@ -100,11 +100,15 @@ namespace IW_GUI
                 try
                 {
                     Inventory.ImportInventory(filename);
+                    Properties.Settings.Default.CSVpath = filename;
                 }
                 catch
                 {
+                    //if an exception is caught, reset the filepath value in settings
+                    Properties.Settings.Default.CSVpath = "\\HITS.csv";
                     MessageBox.Show("Ummmm that's an invalid CSV ya got there buckaroo. Remember that we only take the weird format that HITS exports too.", "Error", MessageBoxButton.OK);
                 }
+                Properties.Settings.Default.Save();
             }
         }
     }

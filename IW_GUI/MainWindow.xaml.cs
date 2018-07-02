@@ -25,6 +25,16 @@ namespace IW_GUI
             InitializeComponent();
             Style = (Style)FindResource(typeof(Window));
             this.FontFamily = new FontFamily("Comic Sans MS");
+
+            //stuff for auto import of inventory file
+            try
+            {
+                Inventory.ImportInventory(Properties.Settings.Default.CSVpath);
+            }
+            catch
+            {
+                //lol
+            }
         }
     }
 }

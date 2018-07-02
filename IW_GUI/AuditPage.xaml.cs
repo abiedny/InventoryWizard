@@ -18,7 +18,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 namespace IW_GUI
 {
     /// <summary>
-    /// Literally just imported the old code rn. Gotta go thru it
+    /// Err this is the audit page I guess
     /// </summary>
     public partial class AuditPage : Page
     {
@@ -27,6 +27,7 @@ namespace IW_GUI
         private List<InventoryItem> scannedItems;
         private List<InventoryItem> expectedItems;
         private List<InventoryItem> modifiedItems;
+        private List<InventoryItem> possibleMatches;
 
         public AuditPage(string hallCode)
         {
@@ -37,9 +38,11 @@ namespace IW_GUI
             scannedItems = new List<InventoryItem>();
             expectedItems = new List<InventoryItem>();
             modifiedItems = new List<InventoryItem>();
+            possibleMatches = new List<InventoryItem>();
 
             ScannedList.ItemsSource = scannedItems;
             ExpectedList.ItemsSource = expectedItems;
+            AutoList.ItemsSource = possibleMatches;
 
             //Stuff that sorts out the expected items using hallcode
             foreach (InventoryItem item in _inventory)
@@ -116,17 +119,24 @@ namespace IW_GUI
             List<string> _remainingInventory = new List<string>();
             List<string> _modifiedInventory = new List<string>();
 
-            foreach (InventoryItem item in scannedItems)
+            try
             {
-                _scannedInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+                foreach (InventoryItem item in scannedItems)
+                {
+                    _scannedInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+                }
+                foreach (InventoryItem item in expectedItems)
+                {
+                    _remainingInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+                }
+                foreach (InventoryItem item in modifiedItems)
+                {
+                    _modifiedInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+                }
             }
-            foreach (InventoryItem item in expectedItems)
+            catch
             {
-                _remainingInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
-            }
-            foreach (InventoryItem item in modifiedItems)
-            {
-                _modifiedInventory.Add(item.type + "    " + item.serviceTag + "    " + item.make + "    " + item.model + "    " + item.staff + "   " + item.room);
+                //they tried to end the audit withour scanning anything
             }
 
             CommonOpenFileDialog dlg = new CommonOpenFileDialog();
@@ -203,6 +213,49 @@ namespace IW_GUI
                 File.WriteAllLines(dlg.FileName + "\\" + _hallCode + "_remainingInventory.txt", _remainingInventory);
             }
             return;
+        }
+
+        //Inefficient as HECK
+        private void ServiceTagInputBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            possibleMatches.Clear();
+
+            Predicate<InventoryItem> predicate = FindItem;
+            string currentInput = ServiceTagInputBox.Text.ToUpper();
+
+            //search the entire inventory for matches screw efficient algorithms
+            foreach (InventoryItem item in _inventory)
+            {
+                if (FindItem(item))
+                {
+                    possibleMatches.Add(item);
+                }
+            }
+
+            AutoList.Items.Refresh();
+        }
+        private bool FindItem(InventoryItem item)
+        {
+            if (item.serviceTag.Contains(ServiceTagInputBox.Text.ToUpper()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void AutoList_Selected(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ServiceTagInputBox.Text = (AutoList.SelectedItem as InventoryItem).serviceTag;
+            }
+            catch
+            {
+                //Idk...
+            }
         }
     }
 }
