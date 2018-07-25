@@ -19,7 +19,6 @@ namespace IW_GUI
         public static void ImportInventory(string importFile) //this works
         {
             _inventory = File.ReadAllLines(importFile).Skip(1).Select(v => InventoryItem.FromCsv(v)).ToList();
-            //TODO: persistant storage of imported inventory
             return;
         }
 

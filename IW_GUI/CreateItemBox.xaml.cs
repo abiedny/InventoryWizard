@@ -65,6 +65,12 @@ namespace IW_GUI
 
         private void OK_OnClick(object sender, RoutedEventArgs e)
         {
+            if(typeAnswer.Text == "" || serviceTagAnswer.Text == "" || makeAnswer.Text == "" || modelAnswer.Text == "" || staffAnswer.Text == "" || roomAnswer.Text == "")
+            {
+                //no closing without answering the questions, dork
+                return;
+            }
+
             NewItem = new InventoryItem
             {
                 type = typeAnswer.Text,
