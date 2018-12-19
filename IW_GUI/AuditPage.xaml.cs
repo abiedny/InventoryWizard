@@ -76,7 +76,7 @@ namespace IW_GUI
             {
                 //it does exist in hits. First confirm correct info
                 var boxResult = MessageBox.Show("Does all this info look good?\nType: " + item.type + "\nService Tag: " + item.serviceTag + "\nMake: " + item.make + "\nModel: " + item.model + "\nStaff: " + item.staff + " \nRoom: " + item.room, "Confirm the info:", MessageBoxButton.YesNo);
-                if (boxResult == MessageBoxResult.No || item.type == "" || item.serviceTag == "" || item.make == "" || item.model == "" || item.staff == "" || item.room == "")
+                if (boxResult == MessageBoxResult.No || item.type == "" || item.serviceTag == "" || item.make == "" || item.model == "" || item.room == "") //it's OK if staff is blank
                 {
                     //Run the add/correct item function or something
                     //and then pop it on the "to add/modify" list
@@ -111,6 +111,7 @@ namespace IW_GUI
             ScannedList.Items.Refresh();
             ExpectedList.Items.Refresh();
             ServiceTagInputBox.Clear();
+            ServiceTagInputBox.Focus(); //Set focus back on input box after submitting an item
         }
 
         private void EndAudit_ButtonClick(object sender, RoutedEventArgs e)

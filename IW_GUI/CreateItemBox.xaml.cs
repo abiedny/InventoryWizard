@@ -65,9 +65,10 @@ namespace IW_GUI
 
         private void OK_OnClick(object sender, RoutedEventArgs e)
         {
-            if(typeAnswer.Text == "" || serviceTagAnswer.Text == "" || makeAnswer.Text == "" || modelAnswer.Text == "" || staffAnswer.Text == "" || roomAnswer.Text == "")
+            if(typeAnswer.Text == "" || serviceTagAnswer.Text == "" || makeAnswer.Text == "" || modelAnswer.Text == "" || roomAnswer.Text == "")
             {
                 //no closing without answering the questions, dork
+                //except for staff I'm OK if that is empty
                 return;
             }
 
