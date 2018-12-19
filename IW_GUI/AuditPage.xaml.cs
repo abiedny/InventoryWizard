@@ -40,6 +40,8 @@ namespace IW_GUI
             modifiedItems = new List<InventoryItem>();
             possibleMatches = new List<InventoryItem>();
 
+            ServiceTagInputBox.KeyUp += ServiceTagInputBox_KeyUp;
+
             ScannedList.ItemsSource = scannedItems;
             ExpectedList.ItemsSource = expectedItems;
             AutoList.ItemsSource = possibleMatches;
@@ -54,8 +56,19 @@ namespace IW_GUI
             }
         }
 
+        private void ServiceTagInputBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Back) && lastText != null) {
+                var temp = lastText;
+                lastText = null;
+                ServiceTagInputBox.Text = temp;
+                ServiceTagInputBox.CaretIndex = ServiceTagInputBox.Text.Length;
+            }
+        }
+
         private void SubmitTag_ButtonClick(object sender, RoutedEventArgs e)
         {
+            lastText = null;
             if (ServiceTagInputBox.Text == "")
             {
                 return;
@@ -217,11 +230,16 @@ namespace IW_GUI
         }
 
         //Inefficient as HECK
+        private string lastText = null;
         private void ServiceTagInputBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (lastText != null)
+            {
+                return;
+            }
+
             possibleMatches.Clear();
 
-            Predicate<InventoryItem> predicate = FindItem;
             string currentInput = ServiceTagInputBox.Text.ToUpper();
 
             //search the entire inventory for matches screw efficient algorithms
@@ -231,6 +249,18 @@ namespace IW_GUI
                 {
                     possibleMatches.Add(item);
                 }
+            }
+
+            if (possibleMatches.Count == 1)
+            {
+                lastText = currentInput.Remove(currentInput.Length - 1, 1); //remove last character that triggered this block
+                string fullTag = possibleMatches[0].serviceTag.ToUpper();
+                ServiceTagInputBox.Text = fullTag;
+                ServiceTagInputBox.CaretIndex = ServiceTagInputBox.Text.Length;
+            }
+            else
+            {
+                lastText = null;
             }
 
             AutoList.Items.Refresh();
