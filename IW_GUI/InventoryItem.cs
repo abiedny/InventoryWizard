@@ -14,6 +14,7 @@ namespace IW_GUI
         public string price { get; set; }
         public string make { get; set; }
         public string model { get; set; }
+        public string purchaseDate { get; set; }
         public string status { get; set; }
         public string replacement { get; set; }
         public string staff { get; set; }
@@ -40,13 +41,14 @@ namespace IW_GUI
                 price = values[4],
                 make = values[5],
                 model = values[6],
-                status = values[7],
-                replacement = values[8],
-                staff = values[9],
-                role = values[10],
-                room = values[11],
-                warranty = values[12],
-                ip = values[13]
+                purchaseDate = values[7],
+                status = values[8],
+                replacement = values[9],
+                staff = values[10],
+                role = values[11],
+                room = values[12],
+                warranty = values[13],
+                ip = values[14]
             };
             return item;
         }
